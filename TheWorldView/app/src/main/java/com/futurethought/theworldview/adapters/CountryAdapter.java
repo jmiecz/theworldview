@@ -42,7 +42,6 @@ public class CountryAdapter extends RecyclerView.Adapter<CountryRowViewHolder>{
                 .appendPath("x")
                 .appendPath(country.getAlpha2Code().toLowerCase() + ".gif");
         String imgUrl = builder.build().toString();
-        Log.i("TEST", imgUrl);
 
         holder.txtCountryName.setText(country.getName());
         Picasso.with(holder.itemView.getContext())
