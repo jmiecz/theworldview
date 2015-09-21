@@ -49,6 +49,13 @@ public class CountryAdapter extends RecyclerView.Adapter<CountryRowViewHolder>{
                 .load(imgUrl)
                 //.resize(200, 105)
                 .into(holder.imgCountryFlag);
+
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //TODO: Create new activity displaying country info
+            }
+        });
     }
 
     @Override
