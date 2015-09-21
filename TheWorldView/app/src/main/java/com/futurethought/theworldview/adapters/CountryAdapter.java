@@ -47,7 +47,8 @@ public class CountryAdapter extends RecyclerView.Adapter<CountryRowViewHolder>{
         holder.txtCountryName.setText(country.getName());
         Picasso.with(holder.itemView.getContext())
                 .load(imgUrl)
-                //.resize(200, 105)
+                .error(R.drawable.error)
+                .placeholder(R.drawable.progress_img)
                 .into(holder.imgCountryFlag);
 
         holder.itemView.setOnClickListener(new View.OnClickListener() {
