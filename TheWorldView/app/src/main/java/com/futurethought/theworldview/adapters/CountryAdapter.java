@@ -1,0 +1,58 @@
+package com.futurethought.theworldview.adapters;
+
+import android.net.Uri;
+import android.support.v7.widget.RecyclerView;
+import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+
+import com.futurethought.theworldview.R;
+import com.futurethought.theworldview.data.Country;
+import com.futurethought.theworldview.viewHolders.CountryRowViewHolder;
+import com.squareup.picasso.Picasso;
+
+import java.util.ArrayList;
+
+/**
+ * Created by Josh Mieczkowski on 9/21/2015.
+ */
+public class CountryAdapter extends RecyclerView.Adapter<CountryRowViewHolder>{
+    private ArrayList<Country> countries;
+
+    public CountryAdapter(ArrayList<Country> countries) {
+        this.countries = countries;
+    }
+
+    @Override
+    public CountryRowViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        View view = LayoutInflater.from(parent.getContext())
+                .inflate(R.layout.country_row, parent, false);
+
+        return new CountryRowViewHolder(view);
+    }
+
+    @Override
+    public void onBindViewHolder(CountryRowViewHolder holder, int position) {
+        Country country = countries.get(position);
+        Uri.Builder builder = new Uri.Builder();
+        builder.scheme("http")
+                .authority("www.geonames.org")
+                .appendPath("flags")
+                .appendPath("x")
+                .appendPath(country.getAlpha2Code().toLowerCase() + ".gif");
+        String imgUrl = builder.build().toString();
+        Log.i("TEST", imgUrl);
+
+        holder.txtCountryName.setText(country.getName());
+        Picasso.with(holder.itemView.getContext())
+                .load(imgUrl)
+                //.resize(200, 105)
+                .into(holder.imgCountryFlag);
+    }
+
+    @Override
+    public int getItemCount() {
+        return countries.size();
+    }
+}

@@ -3,6 +3,7 @@ package com.futurethought.theworldview.data;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.util.ArrayList;
@@ -10,6 +11,7 @@ import java.util.ArrayList;
 /**
  * Created by Josh Mieczkowski on 9/20/2015.
  */
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class Country implements Parcelable {
     @JsonProperty("name")
     private String name;
