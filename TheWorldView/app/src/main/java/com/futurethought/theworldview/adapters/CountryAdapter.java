@@ -8,6 +8,8 @@ import android.view.ViewGroup;
 
 import com.futurethought.theworldview.R;
 import com.futurethought.theworldview.data.Country;
+import com.futurethought.theworldview.helpers.ImageLoader;
+import com.futurethought.theworldview.interfaces.ICountry;
 import com.futurethought.theworldview.viewHolders.CountryRowViewHolder;
 import com.squareup.picasso.Picasso;
 
@@ -17,9 +19,11 @@ import java.util.ArrayList;
  * Created by Josh Mieczkowski on 9/21/2015.
  */
 public class CountryAdapter extends RecyclerView.Adapter<CountryRowViewHolder>{
+    private ICountry iCountry;
     private ArrayList<Country> countries;
 
-    public CountryAdapter(ArrayList<Country> countries) {
+    public CountryAdapter(ICountry iCountry, ArrayList<Country> countries) {
+        this.iCountry = iCountry;
         this.countries = countries;
     }
 
@@ -33,26 +37,17 @@ public class CountryAdapter extends RecyclerView.Adapter<CountryRowViewHolder>{
 
     @Override
     public void onBindViewHolder(CountryRowViewHolder holder, int position) {
-        Country country = countries.get(position);
-        Uri.Builder builder = new Uri.Builder();
-        builder.scheme("http")
-                .authority("www.geonames.org")
-                .appendPath("flags")
-                .appendPath("x")
-                .appendPath(country.getAlpha2Code().toLowerCase() + ".gif");
-        String imgUrl = builder.build().toString();
+        final Country country = countries.get(position);
 
         holder.txtCountryName.setText(country.getName());
-        Picasso.with(holder.itemView.getContext())
-                .load(imgUrl)
-                .error(R.drawable.error)
-                .placeholder(R.drawable.progress_img)
-                .into(holder.imgCountryFlag);
+        ImageLoader.getImage(holder.itemView.getContext(),
+                country.getImgUrl(),
+                holder.imgCountryFlag);
 
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //TODO: Create new activity displaying country info
+                iCountry.onItemClick(country);
             }
         });
     }

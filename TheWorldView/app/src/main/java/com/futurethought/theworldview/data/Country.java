@@ -1,5 +1,6 @@
 package com.futurethought.theworldview.data;
 
+import android.net.Uri;
 import android.os.Parcel;
 import android.os.Parcelable;
 
@@ -45,6 +46,8 @@ public class Country implements Parcelable {
 
     @JsonProperty("alpha3Code")
     private String alpha3Code;
+
+    private String imgUrl;
 
     public String getName() {
         return name;
@@ -124,6 +127,14 @@ public class Country implements Parcelable {
 
     public void setAlpha2Code(String alpha2Code) {
         this.alpha2Code = alpha2Code;
+
+        Uri.Builder builder = new Uri.Builder();
+        builder.scheme("http")
+                .authority("www.geonames.org")
+                .appendPath("flags")
+                .appendPath("x")
+                .appendPath(alpha2Code.toLowerCase() + ".gif");
+        imgUrl = builder.build().toString();
     }
 
     public String getAlpha3Code() {
@@ -132,6 +143,13 @@ public class Country implements Parcelable {
 
     public void setAlpha3Code(String alpha3Code) {
         this.alpha3Code = alpha3Code;
+    }
+
+    public String getImgUrl() {
+        return imgUrl;
+    }
+
+    public Country() {
     }
 
     @Override
@@ -152,9 +170,7 @@ public class Country implements Parcelable {
         dest.writeString(this.nativeName);
         dest.writeString(this.alpha2Code);
         dest.writeString(this.alpha3Code);
-    }
-
-    public Country() {
+        dest.writeString(this.imgUrl);
     }
 
     protected Country(Parcel in) {
@@ -169,9 +185,10 @@ public class Country implements Parcelable {
         this.nativeName = in.readString();
         this.alpha2Code = in.readString();
         this.alpha3Code = in.readString();
+        this.imgUrl = in.readString();
     }
 
-    public static final Parcelable.Creator<Country> CREATOR = new Parcelable.Creator<Country>() {
+    public static final Creator<Country> CREATOR = new Creator<Country>() {
         public Country createFromParcel(Parcel source) {
             return new Country(source);
         }
