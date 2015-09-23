@@ -8,8 +8,8 @@ android {
         applicationId "com.futurethought.theworldview"
         minSdkVersion 15
         targetSdkVersion 23
-        versionCode 1
-        versionName "1.0"
+        versionCode 2
+        versionName "1.01"
     }
     buildTypes {
         release {
@@ -40,6 +40,6 @@ dependencies {
     compile 'com.squareup.retrofit:converter-jackson:1.9.0'
 
     compile 'com.jakewharton:butterknife:7.0.1'
-    
+
     compile 'com.squareup.picasso:picasso:2.5.2'
 }
