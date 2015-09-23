@@ -4,5 +4,4 @@ A demo using the following libraries:
 * RetroFit
 * Jackson
 * ButterKnife
-* Glide
-* OkHttp
+* Picasso
