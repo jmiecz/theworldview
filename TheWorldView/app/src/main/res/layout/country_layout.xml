@@ -5,11 +5,12 @@
     android:background="#545454">
 
     <ImageView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="500dp"
+        android:layout_height="375dp"
         android:id="@+id/imgCountryFlag"
         android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true" />
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="10dp"/>
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/countryInfo"
