@@ -54,4 +54,6 @@ public class CountryAdapter extends RecyclerView.Adapter<CountryRowViewHolder>{
     public int getItemCount() {
         return countries.size();
     }
+
+
 }
