@@ -1,6 +1,5 @@
 package com.futurethought.theworldview.adapters;
 
-import android.net.Uri;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -11,7 +10,6 @@ import com.futurethought.theworldview.data.Country;
 import com.futurethought.theworldview.helpers.ImageLoader;
 import com.futurethought.theworldview.interfaces.ICountry;
 import com.futurethought.theworldview.viewHolders.CountryRowViewHolder;
-import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 

@@ -9,6 +9,14 @@
    <FrameLayout
        android:layout_width="match_parent"
        android:layout_height="match_parent"
-       android:id="@+id/frameLeft"/>
+       android:id="@+id/frameLeft"
+       android:layout_weight=".7"/>
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/frameRight"
+        android:layout_weight=".3"
+        android:visibility="gone"/>
 
 </LinearLayout>
