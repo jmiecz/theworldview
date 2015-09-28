@@ -1,16 +1,20 @@
 package com.futurethought.theworldview;
 
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
+import android.widget.FrameLayout;
 
-import com.futurethought.theworldview.adapters.CountryAdapter;
 import com.futurethought.theworldview.data.Country;
 import com.futurethought.theworldview.data.ServiceFactory;
+import com.futurethought.theworldview.fragments.CountryDetailsFragment;
+import com.futurethought.theworldview.fragments.CountrySelectFragment;
 import com.futurethought.theworldview.interfaces.CountryService;
 import com.futurethought.theworldview.interfaces.ICountry;
 
@@ -24,13 +28,21 @@ import rx.schedulers.Schedulers;
 
 public class MainActivity extends AppCompatActivity implements ICountry {
     private static final String COUNTRIES_TAG = "countriesTag";
+    private static final String CURRENT_COUNTRY_TAG = "currentCountryTag";
 
     private ArrayList<Country> countries = new ArrayList<>();
+    private Country currentCountry = new Country();
 
-    @Bind(R.id.mainLayout) View mainLayout;
-    @Bind(R.id.countriesList) RecyclerView countriesList;
+    @Bind(R.id.mainLayout)
+    View mainLayout;
+
+    @Bind(R.id.frameRight)
+    @Nullable
+    FrameLayout frameRight;
 
     Snackbar snackLoading;
+
+    private boolean isTablet;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,18 +50,16 @@ public class MainActivity extends AppCompatActivity implements ICountry {
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
 
-        countriesList.setHasFixedSize(false);
-        countriesList.setLayoutManager(new LinearLayoutManager(this));
+        isTablet = getResources().getBoolean(R.bool.isTablet);
 
         if(savedInstanceState == null){
-            getCountries();
+            downloadCountries();
         }else{
             countries = savedInstanceState.getParcelableArrayList(COUNTRIES_TAG);
+            currentCountry = savedInstanceState.getParcelable(CURRENT_COUNTRY_TAG);
 
-            if(countries != null && countries.size() > 0){
-                setupCountriesAdapter();
-            }else{
-                getCountries();
+            if(countries == null || countries.size() == 0){
+                downloadCountries();
             }
         }
 
@@ -59,14 +69,10 @@ public class MainActivity extends AppCompatActivity implements ICountry {
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
         outState.putParcelableArrayList(COUNTRIES_TAG, countries);
+        outState.putParcelable(CURRENT_COUNTRY_TAG, currentCountry);
     }
 
-    public void setupCountriesAdapter(){
-        CountryAdapter countryAdapter = new CountryAdapter(this, countries);
-        countriesList.setAdapter(countryAdapter);
-    }
-
-    private void getCountries(){
+    private void downloadCountries(){
         snackLoading = Snackbar.make(mainLayout, "Please wait, currently grabbing countries", Snackbar.LENGTH_INDEFINITE);
         snackLoading.show();
 
@@ -91,13 +97,65 @@ public class MainActivity extends AppCompatActivity implements ICountry {
                     @Override
                     public void onNext(ArrayList<Country> countries) {
                         MainActivity.this.countries = countries;
-                        setupCountriesAdapter();
+                        attachCountrySelect();
+                        snackLoading.dismiss();
                     }
                 });
     }
 
+    public void attachCountrySelect(){
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        Fragment countrySelectFragment = fragmentManager.findFragmentByTag(CountrySelectFragment.class.getName());
+
+        if(countrySelectFragment != null){
+            return;
+        }
+
+        countrySelectFragment = new CountrySelectFragment();
+        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+        fragmentTransaction.replace(R.id.frameLeft, countrySelectFragment, CountrySelectFragment.class.getName());
+        fragmentTransaction.commit();
+    }
+
+    public void attachCountryDetails(){
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        CountryDetailsFragment countryDetailsFragment = (CountryDetailsFragment)fragmentManager.findFragmentByTag(CountryDetailsFragment.class.getName());
+
+        if(countryDetailsFragment != null){
+            countryDetailsFragment.setupAdapter(currentCountry);
+            return;
+        }
+
+        countryDetailsFragment = new CountryDetailsFragment();
+        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+
+        if(isTablet){
+            frameRight.setVisibility(View.VISIBLE);
+            fragmentTransaction.replace(R.id.frameRight, countryDetailsFragment, CountryDetailsFragment.class.getName());
+        }else{
+            fragmentTransaction.replace(R.id.frameLeft, countryDetailsFragment, CountryDetailsFragment.class.getName());
+            fragmentTransaction.addToBackStack(CountryDetailsFragment.class.getName());
+        }
+
+        fragmentTransaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
+
+        fragmentTransaction.commit();
+    }
+
+    @Override
+    public ArrayList<Country> getCountries(){
+        return countries;
+    }
+
+
     @Override
     public void onItemClick(Country country) {
-        startActivity(CountryActivity.getNewInstance(this, country));
+        currentCountry = country;
+        attachCountryDetails();
     }
+
+    public Country getCurrentCountry(){
+        return currentCountry;
+    }
+
 }

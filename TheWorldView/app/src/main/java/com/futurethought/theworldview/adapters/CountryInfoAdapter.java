@@ -6,11 +6,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.futurethought.theworldview.R;
-import com.futurethought.theworldview.data.Country;
-import com.futurethought.theworldview.helpers.ImageLoader;
-import com.futurethought.theworldview.interfaces.ICountry;
 import com.futurethought.theworldview.viewHolders.CountryInfoRowViewHolder;
-import com.futurethought.theworldview.viewHolders.CountryRowViewHolder;
 
 import java.util.ArrayList;
 
