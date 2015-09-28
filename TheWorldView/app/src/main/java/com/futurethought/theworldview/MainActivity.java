@@ -60,6 +60,10 @@ public class MainActivity extends AppCompatActivity implements ICountry {
             countries = savedInstanceState.getParcelableArrayList(COUNTRIES_TAG);
             currentCountry = savedInstanceState.getParcelable(CURRENT_COUNTRY_TAG);
 
+            if(currentCountry != null && isTablet){
+                frameRight.setVisibility(View.VISIBLE);
+            }
+
             if(countries == null || countries.size() == 0){
                 downloadCountries();
             }
