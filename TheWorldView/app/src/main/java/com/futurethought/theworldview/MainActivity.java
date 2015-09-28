@@ -19,6 +19,8 @@ import com.futurethought.theworldview.interfaces.CountryService;
 import com.futurethought.theworldview.interfaces.ICountry;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -97,6 +99,13 @@ public class MainActivity extends AppCompatActivity implements ICountry {
                     @Override
                     public void onNext(ArrayList<Country> countries) {
                         MainActivity.this.countries = countries;
+                        Collections.sort(countries, new Comparator<Country>() {
+                                    @Override
+                                    public int compare(Country lhs, Country rhs) {
+                                        return lhs.getName().compareTo(rhs.getName());
+                                    }
+                                });
+
                         attachCountrySelect();
                         snackLoading.dismiss();
                     }
@@ -156,6 +165,17 @@ public class MainActivity extends AppCompatActivity implements ICountry {
 
     public Country getCurrentCountry(){
         return currentCountry;
+    }
+
+    @Override
+    public Country getSeachCountry(String search){
+        for(Country toCheck : countries){
+            if(toCheck.getName().toLowerCase().startsWith(search.toLowerCase())){
+                return toCheck;
+            }
+        }
+
+        return null;
     }
 
 }

@@ -12,4 +12,5 @@ public interface ICountry {
     public ArrayList<Country> getCountries();
     public void onItemClick(Country country);
     public Country getCurrentCountry();
+    public Country getSeachCountry(String search);
 }
