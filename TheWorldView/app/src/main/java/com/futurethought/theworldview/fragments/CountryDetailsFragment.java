@@ -4,6 +4,7 @@ import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -13,6 +14,7 @@ import android.widget.ImageView;
 
 import com.futurethought.theworldview.R;
 import com.futurethought.theworldview.adapters.CountryInfoAdapter;
+import com.futurethought.theworldview.adapters.DividerItemDecoration;
 import com.futurethought.theworldview.data.Country;
 import com.futurethought.theworldview.helpers.ImageLoader;
 import com.futurethought.theworldview.interfaces.ICountry;
@@ -46,6 +48,7 @@ public class CountryDetailsFragment extends Fragment {
         View view = inflater.inflate(R.layout.country_layout, container, false);
         ButterKnife.bind(this, view);
 
+        countryInfo.addItemDecoration(new DividerItemDecoration(getResources().getDrawable(R.drawable.abc_list_divider_mtrl_alpha)));
         countryInfo.setHasFixedSize(false);
         countryInfo.setLayoutManager(new LinearLayoutManager(getContext()));
 
